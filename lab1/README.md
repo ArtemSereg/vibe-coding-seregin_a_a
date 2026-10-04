@@ -128,7 +128,7 @@
 
 ### Видео-демо
 Ссылка на видео-демо:  
-`[вставить ссылку на YouTube или Google Drive]`
+[`[вставить ссылку на YouTube или Google Drive]`](https://drive.google.com/file/d/10woyQuvN2uLeb9WWns6fGd5V1evPw6wp/view?usp=sharing)
 
 ---
 
