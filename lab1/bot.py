@@ -7,6 +7,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 import os
@@ -33,9 +34,10 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-load_dotenv()
+BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(BASE_DIR / ".env")
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-STATS_FILE = Path("stats.json")
+STATS_FILE = BASE_DIR / "stats.json"
 
 
 @dataclass(frozen=True)
@@ -182,7 +184,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = (
         "👋 Привет! Я бот-помощник по подбору настольных игр.\n\n"
         "Я помогу выбрать игру по типу компании или по жанру.\n"
-        "Нажимай кнопки ниже или используй команды /types и /genres."
+        "Нажимай кнопки ниже в самом сообщении."
     )
     await update.message.reply_text(message, reply_markup=main_menu_keyboard())
 
@@ -198,59 +200,81 @@ async def genres(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     await query.answer()
+
     try:
+        chat_id = query.message.chat_id
+        text = query.message.text or ""
         data = query.data
+
+        # Отправляем в чат сообщение, имитирующее выбор пользователя,
+        # чтобы история переписки выглядела естественно.
         if data == "menu_types":
-            await query.edit_message_text("Выбери тип компании:", reply_markup=types_keyboard())
+            await context.bot.send_message(chat_id=chat_id, text="🎲 По типу компании")
+            await context.bot.send_message(chat_id=chat_id, text="Выбери тип компании, и я предложу подходящие настолки:", reply_markup=types_keyboard())
             return
+
         if data == "menu_genres":
-            await query.edit_message_text("Выбери жанр:", reply_markup=genres_keyboard())
+            await context.bot.send_message(chat_id=chat_id, text="🧩 По жанрам")
+            await context.bot.send_message(chat_id=chat_id, text="Выбери жанр, и я предложу подходящие настольные игры:", reply_markup=genres_keyboard())
             return
+
         if data == "menu_stats":
+            await context.bot.send_message(chat_id=chat_id, text="📊 Моя статистика")
             count = get_recommendation_count(query.from_user.id)
-            await query.edit_message_text(
-                f"📊 <b>Твоя статистика</b>\n\nТы запрашивал рекомендации <b>{count}</b> раз(а).",
+            await context.bot.send_message(
+                chat_id=chat_id,
+                text=f"📊 Твоя статистика\n\nТы запрашивал рекомендации {count} раз(а).",
                 reply_markup=main_menu_keyboard(),
-                parse_mode="HTML",
             )
             return
+
         if data == "menu_about":
+            await context.bot.send_message(chat_id=chat_id, text="ℹ️ О боте")
             about_text = (
-                "ℹ️ <b>О боте</b>\n\n"
+                "ℹ️ О боте\n\n"
                 "Этот проект помогает подбирать настольные игры по типу компании и жанру.\n"
                 "Бот хранит простую статистику запросов в JSON-файле и содержит встроенную базу популярных игр.\n\n"
                 "Создан для быстрого и понятного подбора настолок в дружеской, семейной или соло-компании."
             )
-            await query.edit_message_text(about_text, reply_markup=main_menu_keyboard(), parse_mode="HTML")
+            await context.bot.send_message(chat_id=chat_id, text=about_text, reply_markup=main_menu_keyboard())
             return
+
         if data == "menu_back":
-            await query.edit_message_text("Главное меню:", reply_markup=main_menu_keyboard())
+            await context.bot.send_message(chat_id=chat_id, text="⬅️ Назад")
+            await context.bot.send_message(chat_id=chat_id, text="Главное меню:", reply_markup=main_menu_keyboard())
             return
+
         if data.startswith("type_"):
             category_key = data.replace("type_", "")
             games = choose_random_games(find_games_by_type(category_key))
             increase_recommendation_count(query.from_user.id)
-            await query.edit_message_text(
-                f"🎲 <b>Рекомендации по типу: {TYPE_CATEGORIES.get(category_key, 'неизвестно')}</b>\n\n{format_games(games)}",
+            await context.bot.send_message(chat_id=chat_id, text=text)
+            await context.bot.send_message(
+                chat_id=chat_id,
+                text=f"🎲 Рекомендации по типу: {TYPE_CATEGORIES.get(category_key, 'неизвестно')}\n\n{format_games(games)}",
                 reply_markup=main_menu_keyboard(),
                 parse_mode="HTML",
             )
             return
+
         if data.startswith("genre_"):
             genre_key = data.replace("genre_", "")
             genre_name = GENRE_CATEGORIES.get(genre_key, "")
             games = choose_random_games(find_games_by_genre(genre_name))
             increase_recommendation_count(query.from_user.id)
-            await query.edit_message_text(
-                f"🧩 <b>Рекомендации по жанру: {genre_name}</b>\n\n{format_games(games)}",
+            await context.bot.send_message(chat_id=chat_id, text=text)
+            await context.bot.send_message(
+                chat_id=chat_id,
+                text=f"🧩 Рекомендации по жанру: {genre_name}\n\n{format_games(games)}",
                 reply_markup=main_menu_keyboard(),
                 parse_mode="HTML",
             )
             return
-        await query.edit_message_text("Неизвестная команда меню. Попробуй вернуться в главное меню.", reply_markup=main_menu_keyboard())
+
+        await context.bot.send_message(chat_id=chat_id, text="Неизвестная команда меню. Попробуй вернуться в главное меню.", reply_markup=main_menu_keyboard())
     except Exception as error:
         logger.exception("Ошибка при обработке callback_query: %s", error)
-        await query.edit_message_text("⚠️ Произошла ошибка при обработке запроса. Попробуй ещё раз.", reply_markup=main_menu_keyboard())
+        await context.bot.send_message(chat_id=chat_id, text="⚠️ Произошла ошибка при обработке запроса. Попробуй ещё раз.", reply_markup=main_menu_keyboard())
 
 
 async def unknown_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -266,6 +290,7 @@ async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> N
 def main() -> None:
     if not TOKEN:
         raise RuntimeError("Переменная окружения TELEGRAM_BOT_TOKEN не найдена. Создай файл .env и добавь туда токен бота.")
+
     application = Application.builder().token(TOKEN).build()
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("types", types))
@@ -273,7 +298,12 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(button_handler))
     application.add_handler(MessageHandler(filters.COMMAND, unknown_command))
     application.add_error_handler(error_handler)
+
     logger.info("Бот запущен...")
+
+    # В Python 3.14 у некоторых конфигураций может не быть текущего event loop.
+    # Создаём его явно, чтобы python-telegram-bot мог запуститься корректно.
+    asyncio.set_event_loop(asyncio.new_event_loop())
     application.run_polling()
 
 
