@@ -3,7 +3,7 @@
 > 
 > **Faculty:** [FTMI] (https://ftmi.itmo.ru/)
 > 
-> **Course:** [Введение в веб технологии] (https://itmo-ict-faculty.github.io/introduction-in-web-tech/)
+> **Course:** [Vibe Coding: AI - боты для бизнеса] (https://ex-itmo-ict-faculty.github.io/vibe-coding-for-business)
 > 
 > **Year:** 2025/2026
 > 
