@@ -106,10 +106,25 @@
 
 ### Скриншоты работы бота
 - Скриншот 1 — запуск бота и команда `/start`
+
+<img width="810" height="356" alt="image" src="https://github.com/user-attachments/assets/0a7ce4a3-e522-4e45-bcb5-d7b76a9af152" />
+
 - Скриншот 2 — меню выбора по типу компании
+
+<img width="744" height="314" alt="image" src="https://github.com/user-attachments/assets/4458d5a4-5054-493e-b9e7-a9b04698fbb8" />
+
 - Скриншот 3 — меню выбора по жанру
+
+<img width="618" height="313" alt="image" src="https://github.com/user-attachments/assets/7de5a7c9-01a0-4107-85c5-8de608c515b4" />
+
 - Скриншот 4 — отображение статистики
+
+<img width="670" height="300" alt="image" src="https://github.com/user-attachments/assets/6c86e272-4be0-45a1-9e19-165d9c480ea0" />
+
 - Скриншот 5 — описание бота
+
+<img width="680" height="409" alt="image" src="https://github.com/user-attachments/assets/417e4b2b-7145-445b-8190-25c09f20ccb8" />
+
 
 ### Видео-демо
 Ссылка на видео-демо:  
