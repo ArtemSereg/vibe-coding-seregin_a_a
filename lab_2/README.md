@@ -215,30 +215,21 @@ def format_games(games: Sequence[BoardGame]) -> str:
 
 ## 6. Тестирование
 
-### Скриншоты работы
-
-Скриншоты в рамках этого отчета не приложены. При необходимости можно добавить их вручную после запуска бота.
-
 ### Примеры запросов и ответов
 
 #### Запрос 1: `/start`
 
-**Ответ:**
-- приветствие;
-- краткое описание возможностей;
-- главное меню с кнопками.
+<img width="775" height="474" alt="image" src="https://github.com/user-attachments/assets/53685bf0-bab7-4d21-b0a3-fee2ce3b97c2" />
+
 
 #### Запрос 2: кнопка **По сложности** → **Сложная**
 
-**Ответ:**
-- список сложных игр, например:
-  - `Terraforming Mars`
-  - `Twilight Struggle`
-  - `Through the Ages`
-  - `Gloomhaven`
-  - `Ark Nova`
+<img width="976" height="896" alt="image" src="https://github.com/user-attachments/assets/ec7ed4c4-d839-4d7b-9870-70fa58ae9409" />
+
 
 #### Запрос 3: обычный текст `привет`
+
+<img width="957" height="320" alt="image" src="https://github.com/user-attachments/assets/bae7d5c2-5ea4-40f9-b6bb-ebef4eba44ec" />
 
 **Ответ:**
 - сообщение о том, что команда неизвестна;
@@ -246,7 +237,7 @@ def format_games(games: Sequence[BoardGame]) -> str:
 
 ### Видео-демо
 
-Видео-демо в этот отчет не встроено. Его можно добавить отдельно как ссылку на файл или облачное хранилище.
+https://drive.google.com/file/d/1a3aDvmKrJLL9KqxDdIuMwkMqowZpPejX/view?usp=sharing 
 
 ---
 
