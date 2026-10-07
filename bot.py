@@ -462,7 +462,7 @@ def main() -> None:
     global GAMES
 
     if not TOKEN:
-        raise RuntimeError("Переменная окружения TELEGRAM_BOT_TOKEN не найдена. Создай файл .env и добавь туда токен бота.")
+        raise RuntimeError("Переменная окружения TELEGRAM_BOT_TOKEN не найдена. Добавь её в настройки Railway или в локальный .env-файл.")
 
     GAMES = load_games_from_csv()
     logger.info("Загружено игр из CSV: %s", len(GAMES))
