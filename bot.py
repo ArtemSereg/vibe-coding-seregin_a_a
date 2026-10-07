@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 BASE_DIR = Path(__file__).resolve().parent
 load_dotenv()
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN") or os.getenv("BOT_TOKEN")
 STATS_FILE = BASE_DIR / "stats.json"
 CSV_FILE = BASE_DIR / "board_games.csv"
 
@@ -462,7 +462,8 @@ def main() -> None:
     global GAMES
 
     if not TOKEN:
-        raise RuntimeError("Переменная окружения TELEGRAM_BOT_TOKEN не найдена. Добавь её в настройки Railway или в локальный .env-файл.")
+        env_keys = ", ".join(sorted([key for key in os.environ.keys() if "TOKEN" in key.upper()])) or "нет переменных TOKEN"
+        raise RuntimeError(f"Не найден токен бота. Railway видит: {env_keys}. Добавь TELEGRAM_BOT_TOKEN или BOT_TOKEN в Variables.")
 
     GAMES = load_games_from_csv()
     logger.info("Загружено игр из CSV: %s", len(GAMES))
