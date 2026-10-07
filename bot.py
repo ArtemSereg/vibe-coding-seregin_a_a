@@ -7,7 +7,6 @@
 
 from __future__ import annotations
 
-import asyncio
 import csv
 import json
 import logging
@@ -462,7 +461,7 @@ def main() -> None:
     global GAMES
 
     if not TOKEN:
-        env_keys = ", ".join(sorted([key for key in os.environ.keys() if "TOKEN" in key.upper()])) or "нет переменных TOKEN"
+        env_keys = ", ".join(sorted([key for key in os.environ if "TOKEN" in key.upper()])) or "нет переменных TOKEN"
         raise RuntimeError(f"Не найден токен бота. Railway видит: {env_keys}. Добавь TELEGRAM_BOT_TOKEN или BOT_TOKEN в Variables.")
 
     GAMES = load_games_from_csv()
@@ -478,7 +477,6 @@ def main() -> None:
     application.add_error_handler(error_handler)
 
     logger.info("Бот запущен...")
-    asyncio.set_event_loop(asyncio.new_event_loop())
     application.run_polling()
 
 
