@@ -25,7 +25,7 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 BASE_DIR = Path(__file__).resolve().parent
-load_dotenv(BASE_DIR / ".env")
+load_dotenv()
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 STATS_FILE = BASE_DIR / "stats.json"
 CSV_FILE = BASE_DIR / "board_games.csv"
