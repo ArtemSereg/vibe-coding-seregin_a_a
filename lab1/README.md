@@ -13,7 +13,7 @@
 > 
 > **Lab:** Lab1
 > 
-> **Date of create:** -
+> **Date of create:** 04.10.2026
 > 
 > **Date of finished:** -
 
