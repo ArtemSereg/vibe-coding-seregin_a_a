@@ -41,6 +41,9 @@ class BoardGame:
     play_time_minutes: str
     difficulty: str
     company_type: str
+    price_rub: str
+    mechanics: str
+    goal: str
     description: str
 
 
@@ -132,6 +135,9 @@ def load_games_from_csv() -> list[BoardGame]:
                         play_time_minutes=row.get("play_time_minutes", "").strip(),
                         difficulty=row.get("difficulty", "").strip(),
                         company_type=row.get("company_type", "").strip(),
+                        price_rub=row.get("price_rub", "").strip(),
+                        mechanics=row.get("mechanics", "").strip(),
+                        goal=row.get("goal", "").strip(),
                         description=row.get("description", "").strip(),
                     )
                 )
@@ -190,7 +196,10 @@ def format_games(games: Sequence[BoardGame]) -> str:
             f"  Время партии: {game.play_time_minutes} мин.\n"
             f"  Сложность: {game.difficulty}\n"
             f"  Тип компании: {game.company_type}\n"
-            f"  Описание: {game.description}"
+            f"  Примерная цена: {game.price_rub} ₽\n"
+            f"  Суть: {game.description}\n"
+            f"  Цель: {game.goal}\n"
+            f"  Механика: {game.mechanics}"
         )
     return "\n\n".join(lines)
 
@@ -262,7 +271,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         return
     message = (
         "👋 Привет! Я бот-помощник по подбору настольных игр.\n\n"
-        "Я помогу выбрать игру по типу компании, жанру, сложности, количеству игроков и времени партии.\n"
+        "Я помогу выбрать игру по типу компании, жанру, сложности, количеству игроков, времени партии и подскажу примерную цену, суть, цель и механику.\n"
         "Нажимай кнопки ниже или используй команды /types и /genres."
     )
     await update.message.reply_text(message, reply_markup=main_menu_keyboard())
@@ -334,7 +343,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             about_text = (
                 "ℹ️ О боте\n\n"
                 "Этот проект помогает подбирать настольные игры по CSV-базе.\n"
-                "Бот умеет искать игры по жанру, типу компании, сложности, количеству игроков и времени партии.\n\n"
+                "Бот умеет искать игры по жанру, типу компании, сложности, количеству игроков и времени партии, а также показывает примерную цену, суть, цель и механику игры.\n\n"
                 "Статистика запросов хранится в JSON-файле."
             )
             await context.bot.send_message(chat_id=chat_id, text=about_text, reply_markup=main_menu_keyboard())
